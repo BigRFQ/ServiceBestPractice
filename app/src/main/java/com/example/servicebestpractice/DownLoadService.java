@@ -13,11 +13,11 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.io.File;
-
+//保证下载功能可以一直在后台运行
 public class DownLoadService extends Service {
-    private DownloadTask downloadTask;
+    private DownloadTask downloadTask;//下载对象
     private String downloadUrl;
-
+//定义接口对象，并实现接口方法。
     private DownloadListener listener = new DownloadListener() {
         @Override
         public void onProgress(int progress) {
@@ -67,13 +67,13 @@ public class DownLoadService extends Service {
         // TODO: Return the communication channel to the service.
         return mBinder;
     }
-    class DownloadBinder extends Binder{//Binder实现进程间通讯
+    class DownloadBinder extends Binder{//Binder实现服务和活动通讯
         public void startDownload(String url){
-            if (downloadTask == null){
+            if (downloadTask == null){//当多线程活动没有开启
                 downloadUrl = url;
-                downloadTask = new DownloadTask(listener);
-                downloadTask.execute(downloadUrl);
-                startForeground(1,getNotification("Downloading...",0));
+                downloadTask = new DownloadTask(listener);//传入接口函数，利用回调机制活动和服务间传递消息。
+                downloadTask.execute(downloadUrl);//启动后台任务。
+                startForeground(1,getNotification("Downloading...",0));//前台服务显示
                 Toast.makeText(DownLoadService.this,"Downloading...",Toast.LENGTH_SHORT).show();
             }
         }
@@ -106,10 +106,11 @@ public class DownLoadService extends Service {
     private NotificationManager getNotificationManager(){
         return (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     }
+    //构建通知类型，包括图像、文字、标题等。
     private Notification getNotification(String title,int progress){
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this,0,intent,0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Canceled");
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
         builder.setContentIntent(pi);

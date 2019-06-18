@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private DownLoadService.DownloadBinder downloadBinder;
+    private DownLoadService.DownloadBinder downloadBinder;//服务类子类（匿名类）实例。用于开启、暂停、取消下载。
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
