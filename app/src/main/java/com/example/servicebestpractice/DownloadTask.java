@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DownloadTask extends AsyncTask<String, Integer,Integer> {
+public class DownloadTask extends AsyncTask<String, Integer,Integer> {//实现多线程功能，实现异步消息处理
     public static final int TYPE_SUCCESS=0;
     public static final int TYPE_FAILED=1;
     public static final int TYPE_PAUSED=2;
@@ -21,10 +21,10 @@ public class DownloadTask extends AsyncTask<String, Integer,Integer> {
     private DownloadListener listener;
     private boolean isCanceled = false;
     private boolean isPaused = false;
-    private int lastProgress;
+    private int lastProgress;//表示上一次刷新时的进度
     public DownloadTask(DownloadListener listener){
         this.listener = listener;
-    }
+    }//构造函数
 
     @Override
     protected Integer doInBackground(String... params) {

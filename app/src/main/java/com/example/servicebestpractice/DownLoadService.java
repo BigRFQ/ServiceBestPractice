@@ -67,7 +67,7 @@ public class DownLoadService extends Service {
         // TODO: Return the communication channel to the service.
         return mBinder;
     }
-    class DownloadBinder extends Binder{
+    class DownloadBinder extends Binder{//Binder实现进程间通讯
         public void startDownload(String url){
             if (downloadTask == null){
                 downloadUrl = url;
